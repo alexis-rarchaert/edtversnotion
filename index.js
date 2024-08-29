@@ -245,5 +245,14 @@ async function findNotionItemByName(name) {
     }
   }
   
-  main();
+setInterval(() => {
+    console.log('running script...');
+
+    var date = new Date();
+    var hours = date.getHours();
+
+    if(hours == 7 || hours == 13) {
+        main();
+    }  
+}, 60*60*1000);
   
