@@ -3,7 +3,6 @@ const { google } = require('googleapis');
 const { OAuth2 } = google.auth;
 const calendar = google.calendar('v3');
 const { Client } = require('@notionhq/client');
-const { title } = require('process');
 
 const oAuth2Client = new OAuth2(
   process.env.GOOGLE_CLIENT_ID,
