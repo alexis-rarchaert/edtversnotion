@@ -214,15 +214,13 @@ function getMeals() {
     });
 }
 
-getMeals();
-
-// setInterval(() => {
-//   console.log('running script...');
-//   const hours = new Date().getHours();
-//   if (hours === 7 || hours === 13) {
-//     main();
-//   }
-//   if(hours === 10) {
-//     getMeals();
-//   }
-// }, 60 * 60 * 1000);
+setInterval(() => {
+  console.log('running script...');
+  const hours = new Date().getHours();
+  if (hours === 7 || hours === 13) {
+    main();
+  }
+  if(hours === 10) {
+    getMeals();
+  }
+}, 60 * 60 * 1000);
