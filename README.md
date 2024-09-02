@@ -14,7 +14,20 @@ The project fetches upcoming events from a specified Google Calendar and updates
     cd edtversnotion
     ```
 
-2. Install dependencies:
+2. Create .env file
+    ```sh
+    GOOGLE_REFRESH_TOKEN =
+    GOOGLE_CLIENT_ID =
+    GOOGLE_CLIENT_SECRET =
+
+    GOOGLE_CALENDAR_ID =
+
+    NOTION_TOKEN =
+    NOTION_DATABASE_COURS_ID =
+    NOTION_DATABASE_MEALS_ID =
+    ```
+
+3. Install dependencies:
     ```sh
     npm install
     ```
