@@ -13,7 +13,8 @@ oAuth2Client.setCredentials({
 });
 
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
-const databaseId = process.env.NOTION_DATABASE_ID;
+const databaseCoursId = process.env.NOTION_DATABASE_COURS_ID;
+const databaseMealsId = process.env.NOTION_DATABASE_MEALS_ID;
 
 async function getUpcomingEvents() {
   const res = await calendar.events.list({
@@ -29,7 +30,7 @@ async function getUpcomingEvents() {
 
 async function findNotionItemByName(name) {
   const response = await notion.databases.query({
-    database_id: databaseId,
+    database_id: databaseCoursId,
   });
   return response.results.find(item => 
     item.url.includes(name.replace(/\s/g, '-').replace('\'', '-').replace('--', '-').toUpperCase())
@@ -113,7 +114,7 @@ async function processEvent(eventInfo, lastEvent) {
   } else {
     console.info('item not found ! creating item...');
     await notion.pages.create({
-      parent: { type: 'database_id', database_id: databaseId },
+      parent: { type: 'database_id', database_id: databaseCoursId },
       properties: {
         title: { title: [{ text: { content: eventInfo.summary } }] },
         Date: {
