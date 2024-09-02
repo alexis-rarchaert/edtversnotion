@@ -170,10 +170,59 @@ async function main() {
   }
 }
 
-setInterval(() => {
-  console.log('running script...');
-  const hours = new Date().getHours();
-  if (hours === 7 || hours === 13) {
-    main();
-  }
-}, 60 * 60 * 1000);
+function getMeals() {
+  const url = "https://api.repas.crous.alexis-rarchaert.fr/getRepas/r666"; //Résulats sous forme de JSON
+
+  fetch(url)
+    .then(response => response.json())
+    .then(data => {
+      //Check notion db if meal already exists for today
+      notion.databases.query({
+        database_id: databaseMealsId,
+      }).then(response => {
+        const today = new Date().toISOString().split('T')[0];
+        const meal = response.results.find(item => item.properties.Date.date.start === today);
+        if (!meal) {
+          console.log(data[0].entrees.map(e => ({ text: { content: e } })));
+          //Create new meal
+          notion.pages.create({
+            parent: { type: 'database_id', database_id: databaseMealsId },
+            properties: {
+              title: { title: [{ text: { content: today } }] },
+              Date: {
+                "id": "M%3BBw",
+                "type": "date",
+                "date": {
+                  "start": today,
+                  "end": today,
+                  "time_zone": null
+                }
+              },
+              Entrées: {
+                multi_select: data[0].entrees.map(e => ({ name: e })),
+              },
+              Plats: {
+                multi_select: data[0].plats.map(p => ({ name: p})),
+              },
+              Desserts: {
+                multi_select: data[0].desserts.map(d => ({ name: d})),
+              },
+            },
+          });
+        }
+      });
+    });
+}
+
+getMeals();
+
+// setInterval(() => {
+//   console.log('running script...');
+//   const hours = new Date().getHours();
+//   if (hours === 7 || hours === 13) {
+//     main();
+//   }
+//   if(hours === 10) {
+//     getMeals();
+//   }
+// }, 60 * 60 * 1000);
