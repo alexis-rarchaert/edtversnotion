@@ -289,6 +289,8 @@ async function mainCalendar() {
   }
 }
 
+mainCalendar();
+
 setInterval(() => {
   console.log('Recherche de nouveaux cours...');
   const hours = new Date().getHours();
