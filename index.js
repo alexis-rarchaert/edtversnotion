@@ -272,6 +272,7 @@ async function calendarProcessEvent(eventInfo, lastEvent) {
 // mainMoodle();
 
 async function mainCalendar() {
+  console.log("Début du traitement des cours...");
   try {
     const events = await getUpcomingEvents(process.env.EDT_CALENDAR_URL);
 
@@ -289,7 +290,7 @@ async function mainCalendar() {
 }
 
 setInterval(() => {
-  console.log('running script...');
+  console.log('Recherche de nouveaux cours...');
   const hours = new Date().getHours();
   if (hours === 7 || hours === 13) {
     mainCalendar();
