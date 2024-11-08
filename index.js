@@ -271,30 +271,30 @@ async function calendarProcessEvent(eventInfo, lastEvent) {
 
 // mainMoodle();
 
-async function mainCalendar() {
-  console.log("Début du traitement des cours...");
-  try {
-    const events = await getUpcomingEvents(process.env.EDT_CALENDAR_URL);
-
-    console.log(events.length + ' cours trouvés !');
-
-    let lastEvent = null;
-    for (const eventInfo of events) {
-      await calendarProcessEvent(eventInfo, lastEvent);
-      lastEvent = eventInfo;
-    }
-    console.log('Tous les cours ont été traités !');
-  } catch (error) {
-    console.error('Erreur:', error);
-  }
-}
+//async function mainCalendar() {
+//  console.log("Début du traitement des cours...");
+//  try {
+//    const events = await getUpcomingEvents(process.env.EDT_CALENDAR_URL);
+//
+//    console.log(events.length + ' cours trouvés !');
+//
+//    let lastEvent = null;
+//    for (const eventInfo of events) {
+//      await calendarProcessEvent(eventInfo, lastEvent);
+//      lastEvent = eventInfo;
+//    }
+//    console.log('Tous les cours ont été traités !');
+//  } catch (error) {
+//    console.error('Erreur:', error);
+//  }
+//}
 
 mainCalendar();
 
-setInterval(() => {
-  console.log('Recherche de nouveaux cours...');
-  const hours = new Date().getHours();
-  if (hours === 7 || hours === 13) {
-    mainCalendar();
-  }
-}, 60 * 60 * 1000);
+//setInterval(() => {
+//  console.log('Recherche de nouveaux cours...');
+//  const hours = new Date().getHours();
+//  if (hours === 7 || hours === 13) {
+//    mainCalendar();
+//  }
+//}, 60 * 60 * 1000);
