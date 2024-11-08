@@ -271,23 +271,23 @@ async function calendarProcessEvent(eventInfo, lastEvent) {
 
 // mainMoodle();
 
-//async function mainCalendar() {
-//  console.log("Début du traitement des cours...");
-//  try {
-//    const events = await getUpcomingEvents(process.env.EDT_CALENDAR_URL);
-//
-//    console.log(events.length + ' cours trouvés !');
-//
-//    let lastEvent = null;
-//    for (const eventInfo of events) {
-//      await calendarProcessEvent(eventInfo, lastEvent);
-//      lastEvent = eventInfo;
-//    }
-//    console.log('Tous les cours ont été traités !');
-//  } catch (error) {
-//    console.error('Erreur:', error);
-//  }
-//}
+async function mainCalendar() {
+  console.log("Début du traitement des cours...");
+  try {
+    const events = await getUpcomingEvents(process.env.EDT_CALENDAR_URL);
+
+    console.log(events.length + ' cours trouvés !');
+
+    let lastEvent = null;
+    for (const eventInfo of events) {
+      await calendarProcessEvent(eventInfo, lastEvent);
+      lastEvent = eventInfo;
+    }
+    console.log('Tous les cours ont été traités !');
+  } catch (error) {
+    console.error('Erreur:', error);
+  }
+}
 
 mainCalendar();
 
