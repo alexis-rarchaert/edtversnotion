@@ -60,7 +60,7 @@ const parseDescription = (description) => {
   const categories = description.match(/Catégorie: (.+)/);
   const tuteurs = description.match(/Tuteur: (.+)/);
   const groupes = description.match(/Groupe: (.+)/);
-  const salle = description.match(/Salle: (.+)/);
+  let salle = description.match(/Salle: (.+)/);
   const desc = description.match(/Description: (.+)/);
 
   return {
@@ -118,8 +118,27 @@ async function calendarProcessEvent(eventInfo, lastEvent) {
     const type = properties.Type.multi_select.map(t => t.name);
     const prof = properties.Prof.multi_select.map(t => t.name);
     const groupes = properties.Groupes.multi_select.map(t => t.name);
-    const salle = properties.Salle.multi_select.map(t => t.name);
+    let salle = properties.Salle.multi_select.map(t => t.name);
     const description = properties.Description.rich_text.map(t => t.text.content).join('');
+
+    salle = salle.map(s => {
+      console.log(s);
+      if (s === "Amphi COCAGNE") {
+        console.log("+ | Amphi COCAGNE renommé en Amphi Central");
+        return "Amphi Central";
+      }
+      else if (s === "Amphi ALBINQUE") {
+        console.log("+ | Amphi ALBINQUE renommé en Grand Amphi");
+        return "Grand Amphi";
+      }
+      else if (s === "Amphi SIDOBRE") {
+        console.log("+ | Amphi SIDOBRE renommé en Petit Amphi");
+        return "Petit Amphi";
+      }
+      else {
+        return s;
+      }
+    });
 
     if (new Date(date).getTime() === new Date(eventInfo.start).getTime() && type.includes(eventInfo.description.categorie) && prof.every(p => eventInfo.description.tuteurs.includes(p)) && groupes.every(g => eventInfo.description.groupes.includes(g)) && salle.every(s => eventInfo.description.salles.includes(s)) && description === eventInfo.description.description) {
       console.info('Le cours de "' + eventInfo.course + '" est déjà à jour ! Passage au cours suivant...');
@@ -149,7 +168,7 @@ async function calendarProcessEvent(eventInfo, lastEvent) {
             multi_select: eventInfo.description.groupes.map(g => ({ name: g })),
           },
           Salle: {
-            multi_select: eventInfo.description.salles.map(s => ({ name: s })),
+            multi_select: salle.map(s => ({ name: s })),
           },
           Description: {
             rich_text: [{ text: { content: eventInfo.description.description } }],
