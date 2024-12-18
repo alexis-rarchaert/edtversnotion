@@ -1,7 +1,9 @@
+//Importation des librairies
 require('dotenv').config();
 const { Client } = require('@notionhq/client');
 const ICAL = require('ical.js');
 
+// On créé un client Notion
 const notion = new Client({ auth: process.env.NOTION_TOKEN });
 
 async function getUpcomingEventsForMoodle(calendarUrl) {
@@ -192,6 +194,83 @@ async function calendarProcessEvent(eventInfo, lastEvent) {
   }
 }
 
+// async function moodleProcessEvent(eventInfo) {
+//   const item = await findNotionItemByName(eventInfo.summary, process.env.NOTION_DATABASE_TASKS_ID);
+
+//   if(item) {
+//     console.info('Tâche ' + eventInfo.summary + ' trouvée ! Vérification des informations avant mise à jour...');
+//     const properties = item.properties;
+//     const date = properties.Date.date.start;
+//     const description = properties.Description.rich_text.map(t => t.text.content).join('');
+   
+//     if (new Date(date).getTime() === new Date(eventInfo.startDate).getTime() && description === eventInfo.description) {
+//       console.info('La tâche de "' + eventInfo.summary + '" est déjà à jour ! Passage à la tâche suivante...');
+//       return;
+//     } else {
+//       console.info('La tâche de "' + eventInfo.summary + '" n\'est pas à jour ! Mise à jour en cours...');
+
+//       await notion.pages.update({
+//         page_id: item.id,
+//         properties: {
+//           Date: {
+//             "id": "M%3BBw",
+//             "type": "date",
+//             "date": {
+//               "start": eventInfo.startDate,
+//               "end": eventInfo.endDate,
+//               "time_zone": null
+//             }
+//           },
+//           Description: {
+//             rich_text: [{ text: { content: eventInfo.description } }],
+//           },
+//         },
+//       });
+//       console.info('Tâche ' + eventInfo.summary + ' mise à jour !');
+//     }
+//   } else {
+//     await notion.pages.create({
+//       parent: { type: 'database_id', database_id: process.env.NOTION_DATABASE_TASKS_ID },
+//       properties: {
+//         title: { title: [{ text: { content: eventInfo.summary } }] },
+//         Date: {
+//           "id": "M%3BBw",
+//           "type": "date",
+//           "date": {
+//             "start": eventInfo.startDate,
+//             "end": eventInfo.endDate,
+//             "time_zone": null
+//           }
+//         },
+//         Description: {
+//           rich_text: [{ text: { content: eventInfo.description } }],
+//         },
+//         id: {
+//           rich_text: [{ text: { content: eventInfo.id } }],
+//         }
+//       },
+//     });
+//     console.info('Nouvelle tâche, ' + eventInfo.summary + ' ajoutée !');
+//   }
+// }
+
+// async function mainMoodle() {
+//   try {
+//     const tasks = await getUpcomingEventsForMoodle(process.env.MOODLE_CALENDAR_URL);
+
+//     console.log(tasks.length + ' events found !');
+
+//     for(const tasksInfo of tasks) {
+//       await moodleProcessEvent(tasksInfo);
+//     }
+//     console.log('Toutes les tâches ont été traitées !');
+//   } catch (error) {
+//     console.error('Erreur:', error);
+//   }
+// }
+
+// mainMoodle();
+
 async function mainCalendar() {
   console.log("Début du traitement des cours...");
   try {
@@ -211,3 +290,11 @@ async function mainCalendar() {
 }
 
 mainCalendar();
+
+//setInterval(() => {
+//  console.log('Recherche de nouveaux cours...');
+//  const hours = new Date().getHours();
+//  if (hours === 7 || hours === 13) {
+//    mainCalendar();
+//  }
+//}, 60 * 60 * 1000);
